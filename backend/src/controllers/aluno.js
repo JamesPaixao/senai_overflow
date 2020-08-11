@@ -3,7 +3,8 @@ const Aluno = require("../models/Aluno");
 
 module.exports = {
     async listar(req, res){
-        const alunos = await Aluno.findAll();
+        const alunos = await Aluno.findAll({
+        });
 
         res.send(alunos);
     },
