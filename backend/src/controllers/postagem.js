@@ -19,8 +19,7 @@ module.exports = {
     },
 
     async store(req, res) {
-        const token = req.headers.authorization;
-        const [Bearer, created_aluno_id] = token.split(" ");
+        const created_aluno_id = aluno.id;
 
         const { titulo, descricao, imagem, gists } = req.body;
 
