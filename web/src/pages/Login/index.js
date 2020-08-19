@@ -1,29 +1,129 @@
-import React from "react";
+import React, { useState } from "react";
+import { api } from "../../services/api";
 
 import { Container, ImageCropped, Form, Titulo, SubTitulo, InputGroup, Button } from "./style";
 import foto from "../../assets/foto.jpg";
 
+const FormRegistrar = (props) => {
+    
+    const [alunoRegistrar, setAlunoRegistrar] = useState({
+        nome: "",
+        senha: "",
+        email: "",
+        ra: "",
+    });
+
+    const handlerInput = (e) => {
+        setAlunoRegistrar({...alunoRegistrar, [e.target.id]: e.target.value});
+    };
+
+    const registrar = async (e) => {
+        e.preventDefault();
+
+        try {
+            const retorno = await api.post("/alunos", alunoRegistrar);
+
+            if(retorno.status === 201) {
+                //logar na aplicação
+                //redirecionar para tela home
+
+                window.alert("Registrado com sucesso!");
+            }
+        } catch (erro) {
+            console.log(erro);
+            window.alert(erro.response.data.erro);
+        }
+    };
+    
+    return(
+        <Form onSubmit={registrar}>
+            <Titulo>SENAI OVERFLOW</Titulo>
+            <SubTitulo>Compartilhe suas dúvidas</SubTitulo>
+            <InputGroup>
+                <label>Nome</label>
+                <input type="text" id="nome" value={alunoRegistrar.nome} onChange={handlerInput} placeholder="Insira seu nome" required />
+            </InputGroup>
+            <InputGroup>
+                <label>Email</label>
+                <input type="email" id="email" value={alunoRegistrar.email} onChange={handlerInput} placeholder="Insira seu email" required />
+            </InputGroup>
+            <InputGroup>
+                <label>Senha</label>
+                <input type="password" id="senha" value={alunoRegistrar.senha} onChange={handlerInput} placeholder="Insira sua senha" required />
+            </InputGroup>
+            <InputGroup>
+                <label>RA</label>
+                <input type="text" id="ra" value={alunoRegistrar.ra} onChange={handlerInput} placeholder="Insira seu RA" required />
+            </InputGroup>
+            <Button type="submit">Registrar-se</Button>
+            <Button type="button" onClick={() => {
+                props.mostrarForm("login");
+            }}>Já tenho cadastro</Button>
+         </Form>
+    );
+};
+
+
+const FormLogin = (props) => {
+    
+    const [alunoLogin, setAlunoLogin] = useState({
+        email: "",
+        senha: "",
+    });
+
+    const handlerInput = (e) => {
+        setAlunoLogin({...alunoLogin, [e.target.id]: e.target.value});
+    };
+
+    const entrar = async (e) => {
+        e.preventDefault();
+
+        try {
+            const retorno = await api.post("/sessao", alunoLogin);
+
+            if(retorno.status === 201) {
+                //logar na aplicação
+                //redirecionar para tela home
+
+                window.alert("Logado com sucesso!");
+            }
+        } catch (erro) {
+            console.log(erro);
+            window.alert(erro.response.data.erro);
+        }
+    };
+    
+    return(
+        <Form onSubmit={entrar}>
+            <Titulo>SENAI OVERFLOW</Titulo>
+            <SubTitulo>Compartilhe suas dúvidas</SubTitulo>
+            <InputGroup>
+                <label>E-mail</label>
+                <input type="email" id="email" value={alunoLogin.email} onChange={handlerInput} placeholder="Insira seu email" required />
+            </InputGroup>
+            <InputGroup>
+                <label>Senha</label>
+                <input type="password" id="senha" value={alunoLogin.senha} onChange={handlerInput} placeholder="Insira sua senha" required />
+            </InputGroup>
+            <Button type="submit">Entrar</Button>
+            <Button type="button" onClick={() => {
+                props.mostrarForm("registrar");
+            }}>Registrar-se</Button>
+         </Form>
+    );
+};
+
 const Login = () => {
+    
+    const [mostrarForm, setMostrarForm] = useState("login");
+    
     return (
         <>
             <Container>
                 <ImageCropped>
-                    <img src={foto} alt="Imagem de capa"/>
+                    <img src={foto} alt="Imagem de capa" />
                 </ImageCropped>
-                <Form>
-                    <Titulo>SENAI OVERFLOW</Titulo>
-                    <SubTitulo>Compartilhe suas dúvidas</SubTitulo>
-                    <InputGroup>
-                        <label>E-mail</label>
-                        <input type="email" placeholder="Insira seu email"/>
-                    </InputGroup>
-                    <InputGroup>
-                        <label>Senha</label>
-                        <input type="password" placeholder="Insira sua senha"/>
-                    </InputGroup>
-                    <Button>Entrar</Button>
-                    <Button>Registrar-se</Button>
-                </Form>
+                {mostrarForm === "login" ? (<FormLogin mostrarForm={setMostrarForm} />) : (<FormRegistrar mostrarForm={setMostrarForm}/>)};
             </Container>
         </>
     )
