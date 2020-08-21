@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, {keyframes} from "styled-components";
 
 export const Container = styled.div`
     width: 100vw;
@@ -16,7 +16,7 @@ export const ImageCropped = styled.div`
     max-width: 580px;
     min-width: 100px;
     height: 90%;
-    min-height: 500px;
+    min-height: 400px;
     max-height: 700px;
 
     overflow: hidden;
@@ -30,11 +30,20 @@ export const ImageCropped = styled.div`
     }
 `
 
+const fadeForm = keyframes`
+    from{
+        opacity: 0;
+    };
+    to{
+        opacity: 1;
+    },
+`;
+
 export const Form = styled.form`
     width: 100%;
     max-width: 400px;
     height: 90%;
-    min-height: 500px;
+    min-height: 400px;
     border-radius: 0px 10px 10px 0px;
 
     border solid 1px var(--white);
@@ -44,6 +53,7 @@ export const Form = styled.form`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    animation: ${fadeForm} 1.5s;
 `
 
 export const Titulo = styled.h1`
