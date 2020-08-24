@@ -55,6 +55,7 @@ export const GlobalStyle = createGlobalStyle`
         background-color: var(--primary);
         border: 1px solid var(--white);
         transition: background-color 0.2s;
+        cursor: pointer;
 
         :active{
             color: var(--gray);

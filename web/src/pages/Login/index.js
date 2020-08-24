@@ -3,6 +3,9 @@ import { api } from "../../services/api";
 
 import { Container, ImageCropped, Form, Titulo, SubTitulo, InputGroup, Button } from "./style";
 import foto from "../../assets/foto.jpg";
+import Alerts from "../../components/Alerts"
+import { useHistory } from "react-router-dom";
+import { signIn } from "../../services/security";
 
 const FormRegistrar = (props) => {
     
@@ -66,6 +69,8 @@ const FormRegistrar = (props) => {
 
 const FormLogin = (props) => {
     
+    const history = useHistory();
+
     const [alunoLogin, setAlunoLogin] = useState({
         email: "",
         senha: "",
@@ -83,9 +88,9 @@ const FormLogin = (props) => {
 
             if(retorno.status === 201) {
                 //logar na aplicação
+                signIn(retorno.data);
                 //redirecionar para tela home
-
-                window.alert("Logado com sucesso!");
+                return history.push("/home");
             }
         } catch (erro) {
             console.log(erro);

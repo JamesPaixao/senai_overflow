@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 
-import Login from "./pages/Login";
-import Home from "./pages/Home";
+import Routes from "./routes"
 import {GlobalStyle} from "./styles/GlobalStyles";
 
 function App() {
   return (
     <>
-      <Home/>
+      <Routes/>
       <GlobalStyle/>
     </>
   );

@@ -21,7 +21,7 @@
     height: 100%;
     
     display: flex;
-    
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -85,6 +85,7 @@
 
 .card-post{
     width: 70%;
+    height: fit-content;
     border-radius: 6px;
     padding: 10px;
     margin: 20px auto;
@@ -168,9 +169,14 @@
     margin-left: 10px;
 }
 
+.header .btnSair{
+    align-self: flex-end;
+    margin-right: 10px;
+}
+
 ::-webkit-scrollbar {
-  width: 2px;
-  height: 2px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-button {
   width: 0px;

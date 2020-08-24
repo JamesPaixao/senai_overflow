@@ -1,15 +1,23 @@
 import React from 'react';
 import './styles.css'
-import { FiGithub } from "react-icons/fi"
+import { FiGithub, FiLogOut } from "react-icons/fi"
 import fotoPerfil from "../../assets/foto_perfil.png"
 import imgPost from "../../assets/post-exemplo.jpg"
+import { signOut } from '../../services/security';
+import { useHistory } from 'react-router-dom';
+
 function Home() {
-  return (
+    const history = useHistory();
+
+    return (
     <div className="container">
         <header className="header">
             <div><p>SENAI OVERFLOW</p></div>
             <div><input type="search" placeholder="Pesquisar uma Dúvida..."></input></div>
-            <div>Direita</div>
+            <button className="btnSair" onClick={() => {
+                signOut();
+                history.replace("/");
+            }}>Sair <FiLogOut/> </button>
         </header>
         <div className="content">
             <section className="profile">
