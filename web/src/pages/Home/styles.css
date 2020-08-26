@@ -80,6 +80,7 @@
     height: calc(100vh - 70px);
     margin-top: 10px;
     display: flex;
+    flex-direction: column;
     overflow-y: auto;
 }
 
@@ -128,13 +129,17 @@
 }
 
 .card-post body strong {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 500;
+    padding: 5px;
+    text-transform: uppercase;
 }
 
 .card-post body p {
-    font-size: 15px;
+    font-size: 17px;
     margin-top: 5px;
+    background-color: var(--gray);
+    padding: 5px;
 }
 
 .card-post body img {
@@ -147,9 +152,22 @@
     margin-top: 10px;
 }
 
+.card-post footer p{
+    margin-top: 5px;
+}
+
 .card-post footer h1 {
     font-size: 16px;
     font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.card-post footer h1:hover {
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+    color: var(--red);
 }
 
 .card-post footer section{

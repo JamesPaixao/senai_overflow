@@ -15,7 +15,7 @@ module.exports = {
             const comentarios = await postagem.getComentarios({
                 include: {
                     association: "Aluno",
-                    attributes: ["id", "nome"],
+                    attributes: ["id", "nome", "created_at"],
                 },
                 attributes: ["id", "descricao"],
                 order: [["created_at", "ASC"]],
