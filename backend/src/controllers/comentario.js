@@ -29,7 +29,7 @@ module.exports = {
     },
 
     async store(req, res) {
-        const alunoId = aluno.id;
+        const alunoId = req.alunoId;
         
         const {postId} = req.params;
         

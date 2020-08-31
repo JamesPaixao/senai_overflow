@@ -68,11 +68,17 @@
 .profile p{
     font-size: 25px;
 }
-.profile a{
+.profile label{
     color: var(--gray);
     margin-top: 5px;
     font-size: 15px;
     text-decoration: none;
+    letter-spacing: 0;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.profile label:hover{
+    color: var(--red);
 }
 
 .feed{
@@ -121,28 +127,27 @@
     margin-left: 10px;
 }
 
-.card-post body{
+.card-post section{
     background-color: var(--secondary);
     margin-top: 10px;
     display: flex;
     flex-direction: column;
 }
 
-.card-post body strong {
+.card-post section strong {
     font-size: 20px;
     font-weight: 500;
     padding: 5px;
     text-transform: uppercase;
 }
 
-.card-post body p {
+.card-post section p {
     font-size: 17px;
     margin-top: 5px;
-    background-color: var(--gray);
     padding: 5px;
 }
 
-.card-post body img {
+.card-post section img {
     max-height: 500px;
     align-self: center;
     margin-top: 10px;
@@ -181,10 +186,25 @@
     margin-top: 0;
 }
 
+.card-post footer section strong{
+    text-transform: none;
+}
+
 .card-post footer section p{
     margin-top: 10px;
     font-size: 14px;
     margin-left: 10px;
+}
+
+.card-post footer .novo-comentario{
+    width: 100%;
+    margin-top: 5px;
+    display: flex;
+}
+
+.card-post footer .novo-comentario textarea{
+    flex: 1;
+    height: 30px;
 }
 
 .header .btnSair{

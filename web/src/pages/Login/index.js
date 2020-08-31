@@ -9,6 +9,8 @@ import { signIn } from "../../services/security";
 
 const FormRegistrar = (props) => {
     
+    const history = useHistory();
+
     const [alunoRegistrar, setAlunoRegistrar] = useState({
         nome: "",
         senha: "",
@@ -28,9 +30,9 @@ const FormRegistrar = (props) => {
 
             if(retorno.status === 201) {
                 //logar na aplicação
+                signIn(retorno.data);
                 //redirecionar para tela home
-
-                window.alert("Registrado com sucesso!");
+                return history.push("/home");
             }
         } catch (erro) {
             console.log(erro);

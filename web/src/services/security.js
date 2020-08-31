@@ -9,7 +9,7 @@ export const signIn = (aluno) => {
 };
 
 export const signOut = () => {
-    localStorage.clean();
+    localStorage.clear();
 
     api.defaults.headers.common['Authorization'] = undefined;
 };
