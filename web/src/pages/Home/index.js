@@ -6,6 +6,7 @@ import imgPost from "../../assets/post-exemplo.jpg"
 import { signOut, getAluno } from '../../services/security';
 import { useHistory } from 'react-router-dom';
 import { api } from '../../services/api';
+import PopUp from '../../components/PopUp';
 
 const CardPost = ({post}) => {
 
@@ -93,9 +94,50 @@ const CardPost = ({post}) => {
     )
 };
 
+const NovaPostagem = ({setMostrarNovaPostagem}) => {
+    const [novaPostagem, setNovaPostagem] = useState({
+        titulo: "",
+        descricao: "",
+        gists: "",
+    });
+
+
+    const fechar = () => {
+        const {titulo, descricao, gists} = novaPostagem;
+
+        if((titulo || descricao || gists) && !window.confirm("Tem certeza que quer abandonar a dúvida?")){
+            return;
+        }
+        setMostrarNovaPostagem(false);
+    };
+
+    const handlerInput = (e) => {
+        setNovaPostagem({...novaPostagem, [e.target.id]: e.target.value});
+    };
+    
+    return (<PopUp>
+        <form className="nova-postagem">
+            <span onClick={fechar}>&times;</span>
+            <h1>Publique suas dúvidas</h1>
+            <label>Titulo</label>
+            <input type="text" placeholder="Sobre o que é sua dúvida" id="titulo" onChange={handlerInput}/>
+            <label>Descrição</label>
+            <textarea placeholder="Descreva em detalhe, o que te aflige?" id="descricao" onChange={handlerInput}/>
+            <label>Gist <em>(Opcional)</em></label>
+            <input type="text"  id="gists" placeholder="https://gist.github.com/robertkowalski/884f7855499ddd702e4c137081234a1c.js" onChange={handlerInput}/>
+            <label>Imagem <em>(Opcional)</em></label>
+            <input type="file"/>
+            <img alt="preview"/>
+            <button>Enviar</button>
+        </form>
+    </PopUp>
+    )
+};
+
 function Home() {
     const history = useHistory();
     const [postagens, setPostagens] = useState([]);
+    const [mostrarNovaPostagem, setMostrarNovaPostagem] = useState(false);
 
     useEffect(() => {
         const carregarPostagens = async() =>  {
@@ -114,6 +156,7 @@ function Home() {
 
     return (
     <div className="container">
+        {mostrarNovaPostagem && <NovaPostagem setMostrarNovaPostagem={setMostrarNovaPostagem}/>}
         <header className="header">
             <div><p>SENAI OVERFLOW</p></div>
             <div><input type="search" placeholder="Pesquisar uma Dúvida..."></input></div>
@@ -138,9 +181,14 @@ function Home() {
                     <CardPost key={post.id} post={post}/>
                 ))}
             </section>
+            <section className="actions">
+                    <button onClick={() => {
+                        setMostrarNovaPostagem(true);
+                    }}>Nova Postagem</button>
+            </section>
         </div>
     </div>
   )
-}
+};
 
 export default Home;

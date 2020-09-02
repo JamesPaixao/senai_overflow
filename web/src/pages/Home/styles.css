@@ -212,6 +212,68 @@
     margin-right: 10px;
 }
 
+.nova-postagem{
+    width: 600px;
+    height: fit-content;
+    padding: 10px;
+
+    background-color: var(--primary);
+    border-radius: 6px;
+
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+}
+
+.nova-postagem h1{
+    color: var(--white);
+    text-align: center;
+    font-weight: 500;
+}
+
+.nova-postagem label{
+    margin-top: 10px;
+}
+
+.nova-postagem label em{
+    font-size: 14px;
+    font-style: normal;
+}
+
+.nova-postagem textarea{
+    height: 100px;
+}
+
+.nova-postagem input[type="file"]{
+    display: none;
+}
+
+.nova-postagem span {
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    font-size: 30px;
+    color: var(--white);
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.nova-postagem span:hover{
+    color: var(--red);
+}
+
+.actions{
+    padding-top: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
