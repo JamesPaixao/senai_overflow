@@ -2,7 +2,16 @@
 
 const express = require("express");
 
+const multer = require("multer");
+
+const Multer = multer({
+    storage: multer.memoryStorage(),
+    limits: 1024 * 1024,
+});
+
 const autorizacaoMid = require("../src/middlewares/autorizacao");
+const uploadImage = require("./services/firebase");
+
 //criando o roteirizador
 const routes = express.Router();
 
@@ -17,6 +26,7 @@ routes.post("/alunos", alunoController.store);
 
 routes.use(autorizacaoMid);
 
+
 //rotas privadas
 //rotas de usuarios
 routes.get("/alunos", alunoController.listar);
@@ -24,7 +34,7 @@ routes.get("/alunos/:id", alunoController.buscarPorId);
 
 //rotas de postagem
 routes.get("/postagens", postagemController.index);
-routes.post("/postagens", postagemController.store);
+routes.post("/postagens", Multer.single("imagem"), uploadImage, postagemController.store);
 routes.delete("/postagens/:id", postagemController.delete);
 
 //rotas de comentarios 
