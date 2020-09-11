@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './styles.css'
 import { FiGithub, FiLogOut } from "react-icons/fi"
 import fotoPerfil from "../../assets/foto_perfil.png"
@@ -7,6 +7,7 @@ import { signOut, getAluno } from '../../services/security';
 import { useHistory } from 'react-router-dom';
 import { api } from '../../services/api';
 import PopUp from '../../components/PopUp';
+import moment from 'moment';
 
 const CardPost = ({post}) => {
 
@@ -46,12 +47,14 @@ const CardPost = ({post}) => {
         }
     }
 
+    const alunoSessao = getAluno();
+
     return(
         <div className="card-post">
             <header>
                 <img src={fotoPerfil} alt="Foto de Perfil"></img>
-                <strong>{post.Aluno.nome}</strong>
-                <p>{post.createdAt}</p>
+                <strong>Por {post.Aluno.id === alunoSessao.alunoId ? " você" : post.Aluno.nome}</strong>
+                <p>{moment(post.createdAt).locale("America/Sao_Paulo").format("DD/MM/YYYY HH:mm")}</p>
                 {/* renderização condicional, só mostra o ícone se o gists for verdadeiro */}
                 {post.gists && (<FiGithub className="icon" size="25" color="green"/>)}
             </header>
@@ -60,7 +63,7 @@ const CardPost = ({post}) => {
                     {post.titulo}
                 </strong>
                 <p> {post.descricao} </p>
-                <img src={imgPost} alt="Imagem do post"></img>
+                {post.imagem && <img src={post.imagem} alt="Imagem do post"></img>}
             </section>
             <footer>
                 <h1 onClick={carregarComentario}>Comentários</h1>
@@ -94,12 +97,16 @@ const CardPost = ({post}) => {
     )
 };
 
-const NovaPostagem = ({setMostrarNovaPostagem}) => {
+const NovaPostagem = ({setMostrarNovaPostagem}, {carregarPostagens}) => {
     const [novaPostagem, setNovaPostagem] = useState({
         titulo: "",
         descricao: "",
         gists: "",
     });
+
+    const imgRef = useRef();
+
+    const [imagem, setImagem] = useState(null);
 
 
     const fechar = () => {
@@ -111,12 +118,49 @@ const NovaPostagem = ({setMostrarNovaPostagem}) => {
         setMostrarNovaPostagem(false);
     };
 
+    const enviar = async (e) => {
+        e.preventDefault();
+
+        const dados = new FormData();
+
+        dados.append("titulo", novaPostagem.titulo);
+        dados.append("descricao", novaPostagem.descricao);
+        dados.append("gists", novaPostagem.gists);
+        dados.append("imagem", imagem);
+
+        try {
+            await api.post("/postagens", dados, {
+                headers: {
+                    "Content-type": `multipart/form-data`,
+                },
+            });
+
+            carregarPostagens();
+
+            setMostrarNovaPostagem(false);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     const handlerInput = (e) => {
         setNovaPostagem({...novaPostagem, [e.target.id]: e.target.value});
     };
+
+    const handlerImagem = (e) => {
+        if(e.target.files[0]){
+            imgRef.current.src = URL.createObjectURL(e.target.files[0]);
+            imgRef.current.style.display = "block";
+        }
+        else{
+            imgRef.current.src = "";
+            imgRef.current.style.display = "none";
+        }
+        setImagem(e.target.files[0]);
+    };
     
     return (<PopUp>
-        <form className="nova-postagem">
+        <form className="nova-postagem" onSubmit={enviar}>
             <span onClick={fechar}>&times;</span>
             <h1>Publique suas dúvidas</h1>
             <label>Titulo</label>
@@ -125,9 +169,9 @@ const NovaPostagem = ({setMostrarNovaPostagem}) => {
             <textarea placeholder="Descreva em detalhe, o que te aflige?" id="descricao" onChange={handlerInput}/>
             <label>Gist <em>(Opcional)</em></label>
             <input type="text"  id="gists" placeholder="https://gist.github.com/robertkowalski/884f7855499ddd702e4c137081234a1c.js" onChange={handlerInput}/>
-            <label>Imagem <em>(Opcional)</em></label>
-            <input type="file"/>
-            <img alt="preview"/>
+            <label htmlFor="inputImagem">Imagem <em>(Opcional)</em></label>
+            <input id="inputImagem" type="file" onChange={handlerImagem}/>
+            <img alt="preview" ref={imgRef}/>
             <button>Enviar</button>
         </form>
     </PopUp>
@@ -140,23 +184,25 @@ function Home() {
     const [mostrarNovaPostagem, setMostrarNovaPostagem] = useState(false);
 
     useEffect(() => {
-        const carregarPostagens = async() =>  {
-            try {
-                const retorno = await api.get("/postagens");
-
-                setPostagens(retorno.data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
         carregarPostagens();
     }, []);
+
+    const carregarPostagens = async() =>  {
+        try {
+            const retorno = await api.get("/postagens");
+
+            setPostagens(retorno.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const alunoSessao = getAluno();
 
     return (
     <div className="container">
-        {mostrarNovaPostagem && <NovaPostagem setMostrarNovaPostagem={setMostrarNovaPostagem}/>}
+        {mostrarNovaPostagem && 
+        (<NovaPostagem carregarPostagens={carregarPostagens} setMostrarNovaPostagem={setMostrarNovaPostagem}/>)}
         <header className="header">
             <div><p>SENAI OVERFLOW</p></div>
             <div><input type="search" placeholder="Pesquisar uma Dúvida..."></input></div>
